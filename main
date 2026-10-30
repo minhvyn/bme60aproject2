@@ -1,0 +1,63 @@
+// GROUP A: LEDs 1, 3, 5, 7
+const int A_RED = 18;
+const int A_GREEN = 19;
+const int A_BLUE = 21;
+
+// GROUP B: LEDs 2, 4, 6, 8
+const int B_RED = 22;
+const int B_GREEN = 23;
+const int B_BLUE = 25;
+
+// Song tempo
+const int BPM = 142;
+const unsigned long beatInterval = 60000 / BPM;
+
+unsigned long previousMillis = 0;
+bool colorSwap = false;
+
+void setup() {
+  pinMode(A_RED, OUTPUT);
+  pinMode(A_GREEN, OUTPUT);
+  pinMode(A_BLUE, OUTPUT);
+
+  pinMode(B_RED, OUTPUT);
+  pinMode(B_GREEN, OUTPUT);
+  pinMode(B_BLUE, OUTPUT);
+
+  // Initial colors
+  setGroupA(255, 70, 0);   // Orange
+  setGroupB(130, 0, 255);  // Purple
+}
+
+void setGroupA(int red, int green, int blue) {
+  analogWrite(A_RED, red);
+  analogWrite(A_GREEN, green);
+  analogWrite(A_BLUE, blue);
+}
+
+void setGroupB(int red, int green, int blue) {
+  analogWrite(B_RED, red);
+  analogWrite(B_GREEN, green);
+  analogWrite(B_BLUE, blue);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= beatInterval) {
+    previousMillis += beatInterval;
+
+    colorSwap = !colorSwap;
+
+    if (colorSwap) {
+      // Group A purple, Group B orange
+      setGroupA(130, 0, 255);
+      setGroupB(255, 70, 0);
+    }
+    else {
+      // Group A orange, Group B purple
+      setGroupA(255, 70, 0);
+      setGroupB(130, 0, 255);
+    }
+  }
+}
